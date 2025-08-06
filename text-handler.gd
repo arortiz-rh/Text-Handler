@@ -12,7 +12,7 @@ enum Text_Movement_Options {
 
 
 ## The file in which the dialogue will be read from.
-@export var json_file : JSON
+@export var json_file : JSON = JSON.new()
 
 ## Choose how you want the text to be displayed.
 @export var text_movement : Text_Movement_Options
@@ -31,41 +31,51 @@ signal end_of_dialogue
 ## Emitted when the current line of text has finished displaying.
 signal end_of_line
 
-func begin_dialogue():
+var text_holder : Array
+var current_speaker : String = ""
+var current_line : String = ""
+
+func _ready() -> void:
+	process_json()
+
+func begin_dialogue() -> void:
 	pass
 
-# This text handler doesn't manage the dialogue, it only concerns itself with displaying. There must
-# be an external signal that triggers this next function to show the next piece of dialogue.
-func next():
+func next_line() -> void:
 	pass
 
 # HELPER FUNCTIONS
-func _word_by_word(line : String):
+func _word_by_word(line : String) -> void:
 	pass
 
-func _character_by_character(line : String):
+func _character_by_character(line : String) -> void:
 	pass
 
-func _all_at_once(line : String):
+func _all_at_once(line : String) -> void:
 	pass
 
+func process_json() -> void:	
+	if json_file.get_data() == null:
+		assert(false, "No JSON inputted OR no data within JSON")
+	
+	text_holder = json_file.data
 
 # SETTERS
-func set_json(file_path : String):
-	pass
+func set_json(new_json : JSON) -> void:
+	json_file = new_json
 
-func set_text_movement(new_movement : Text_Movement_Options):
-	pass
+func set_text_movement(new_movement : Text_Movement_Options) -> void:
+	text_movement = new_movement
 
 # GETTERS
-func get_speaker():
-	pass
+func get_speaker() -> String:
+	return current_speaker
 
-func get_char_speed():
-	pass
+func get_char_speed() -> int:
+	return char_per_minute
 
-func get_word_speed():
-	pass
+func get_word_speed() -> int:
+	return word_per_minute
 
-func get_json():
-	pass
+func get_json() -> JSON:
+	return json_file
